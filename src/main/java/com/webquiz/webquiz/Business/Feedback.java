@@ -1,4 +1,4 @@
-package com.webquiz.webquiz.Resource;
+package com.webquiz.webquiz.Business;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;

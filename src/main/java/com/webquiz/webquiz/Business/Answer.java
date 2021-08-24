@@ -1,4 +1,4 @@
-package com.webquiz.webquiz.Model;
+package com.webquiz.webquiz.Business;
 
 import java.util.ArrayList;
 import java.util.List;
