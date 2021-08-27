@@ -1,12 +1,12 @@
 package com.webquiz.webquiz.Business;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Controller
+@Service
 public class Feedback {
 
     @Bean

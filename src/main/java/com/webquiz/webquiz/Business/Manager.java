@@ -1,10 +1,16 @@
 package com.webquiz.webquiz.Business;
 
-
+import com.webquiz.webquiz.Business.Sort.BubbleSort;
 import com.webquiz.webquiz.Business.dao.Question;
+import com.webquiz.webquiz.Exception.ForbiddenActionException;
+import com.webquiz.webquiz.Exception.UserNameAlreadyTakenException;
 import com.webquiz.webquiz.Exception.WrongQuestionIdException;
-import com.webquiz.webquiz.Persistance.QuestionRepo;
+import com.webquiz.webquiz.Persistant.QuestionRepo;
+import com.webquiz.webquiz.Persistant.UserRepo;
+import com.webquiz.webquiz.Security.SecurityConfig;
+import com.webquiz.webquiz.Business.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,50 +19,66 @@ import java.util.Optional;
 @Service
 public class Manager {
 
-    @Autowired
     QuestionRepo questionRepo;
+    UserRepo userRepo;
+    PasswordEncoder passwordEncoder;
+    SecurityConfig securityConfig;
 
-  public Iterable<Question> getAllQuestions(){
+    @Autowired
+    public Manager(QuestionRepo questionRepo,
+                   UserRepo userRepo,
+                   PasswordEncoder passwordEncoder,
+                   SecurityConfig securityConfig) {
+
+        this.securityConfig = securityConfig;
+        this.questionRepo = questionRepo;
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Iterable<Question> getAllQuestions() {
         return questionRepo.findAll();
     }
 
-   public void addQuestion(Question question){
-     questionRepo.save(question);
-   }
+    public User getCurrentUser() {
+        return userRepo.getUserByEmail(securityConfig.getCurrentLoggedUserName()).get();
+    }
+
+    public void addQuestion(Question question) {
+        int userID = userRepo.getUserByEmail(getCurrentUser().getEmail()).get().getId();
+        question.setUser_id(userID);
+        questionRepo.save(question);
+    }
 
     public Optional<Question> getQuestionById(int id) throws WrongQuestionIdException {
-      if(id > questionRepo.count())
-          throw new WrongQuestionIdException("Wrong id");
-      else{
-          return questionRepo.findById(id);
-      }
+        Optional<Question> question = questionRepo.getQuestionById(id);
+        if (question.isPresent()) return questionRepo.findById(id);
+        else throw new WrongQuestionIdException("PROVIDED ID ISN'T ASSOCIATED WITH ANY QUESTION.");
     }
 
-    public boolean solveQuiz(List<Integer> userAnswers, List<Integer> correctAnswers){
-        System.out.println(userAnswers);
-        System.out.println(correctAnswers);
+    public boolean solveQuiz(List<Integer> userAnswers, List<Integer> correctAnswers) {
         List<Integer> emptyList = List.of();
-
-        if(userAnswers != null && correctAnswers != null) {
-            return bubbleSort(userAnswers).equals(bubbleSort(correctAnswers));
-        }
-        else return (userAnswers != null || emptyList.equals(correctAnswers)) && (correctAnswers != null || emptyList.equals(userAnswers));
+        if (userAnswers != null && correctAnswers != null)
+            return BubbleSort.bubbleSort(userAnswers).equals(BubbleSort.bubbleSort(correctAnswers));
+        else
+            return (userAnswers != null || emptyList.equals(correctAnswers)) && (correctAnswers != null || emptyList.equals(userAnswers));
     }
 
-    static List<Integer> bubbleSort(List<Integer> arr) {
-        if(arr.size() != 0){
-            int n = arr.size();
-            int temp = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = 1; j < (n - i); j++) {
-                    if (arr.get(j - 1) > arr.get(j)) {
-                        temp = arr.get(j - 1);
-                        arr.add(j - 1, arr.get(j));
-                        arr.add(j, temp);
-                    }
-                }
-            }
-        }
-        return arr;
+    public void deleteQuiz(int id) throws ForbiddenActionException, WrongQuestionIdException {
+
+        int QuestionIDOwner = getQuestionById(id).get().getUser_id();
+        int UserId = getCurrentUser().getId();
+
+        if (QuestionIDOwner == UserId) questionRepo.deleteById(id);
+        else throw new ForbiddenActionException("NOT ENOUGH PERMISSIONS.");
+    }
+
+    public void addUser(User userToAdd) throws UserNameAlreadyTakenException {
+        Optional<User> user = userRepo.getUserByEmail(userToAdd.getEmail());
+        if (user.isEmpty()) {
+            userToAdd.setPassword(passwordEncoder.encode(userToAdd.getPassword()));
+            userRepo.save(userToAdd);
+        } else
+            throw new UserNameAlreadyTakenException("PROVIDED USERNAME IS ALREADY TAKEN");
     }
 }

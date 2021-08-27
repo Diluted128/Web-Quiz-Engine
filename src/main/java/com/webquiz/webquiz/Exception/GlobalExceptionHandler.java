@@ -13,6 +13,20 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     private String handleMessage(WrongQuestionIdException e) {
-        return "BAD ID";
+        return "ID ISN'T ASSOCIATED WITH ANY QUESTION.";
+    }
+
+    @ExceptionHandler(ForbiddenActionException.class)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    private String handleMessage(ForbiddenActionException e) {
+        return "NOT ENOUGH PERMISSIONS";
+    }
+
+    @ExceptionHandler(UserNameAlreadyTakenException.class)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    private String handleMessage(UserNameAlreadyTakenException e) {
+        return "PROVIDED USERNAME IS ALREADY TAKEN";
     }
 }
