@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "QUESTION")
-public class Question{
+public class Question {
 
     @Id
     @Column(name = "ID")
@@ -45,7 +45,8 @@ public class Question{
     @Column(name = "USER_ID")
     private int user_id;
 
-    public Question(){ }
+    public Question() {
+    }
 
     public Question(String Title, String text, int user_id) {
         this.title = Title;
@@ -61,43 +62,43 @@ public class Question{
         this.user_id = user_id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setOptions(List<String> options) {
-        this.options = options;
-    }
-
-    public void setAnswer(List<Integer> answer) {
-        this.answer = answer;
-    }
-
-    public void setId(int ID){
-        id = ID;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int ID) {
+        id = ID;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<String> getOptions() {
         return options;
     }
 
+    public void setOptions(List<String> options) {
+        this.options = options;
+    }
+
     public List<Integer> getAnswer() {
         return answer;
+    }
+
+    public void setAnswer(List<Integer> answer) {
+        this.answer = answer;
     }
 }

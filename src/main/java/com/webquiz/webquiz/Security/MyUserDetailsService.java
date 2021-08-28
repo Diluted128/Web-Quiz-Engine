@@ -1,7 +1,7 @@
 package com.webquiz.webquiz.Security;
 
-import com.webquiz.webquiz.Business.dao.User;
 import com.webquiz.webquiz.Persistant.UserRepo;
+import com.webquiz.webquiz.Business.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +16,7 @@ public class MyUserDetailsService implements UserDetailsService {
     UserRepo userRepo;
 
     @Autowired
-    public MyUserDetailsService(UserRepo userRepo){
+    public MyUserDetailsService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 

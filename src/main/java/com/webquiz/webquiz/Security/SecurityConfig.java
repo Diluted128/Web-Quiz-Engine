@@ -1,6 +1,5 @@
 package com.webquiz.webquiz.Security;
 
-import com.webquiz.webquiz.Security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

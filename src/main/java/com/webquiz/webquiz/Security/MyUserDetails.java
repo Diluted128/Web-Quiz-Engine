@@ -55,5 +55,4 @@ public class MyUserDetails implements UserDetails {
         return true;
     }
 
-
 }

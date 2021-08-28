@@ -21,15 +21,12 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -40,16 +37,20 @@ public class User {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
