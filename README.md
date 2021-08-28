@@ -15,6 +15,6 @@ API was created to manage the website which was dedicated to solving quizzes. Al
 
 ``/api/quizzes/{id}`` - Accepts GET requests and return a particular quiz based on id specified in path variable. If a question doesn't exist response contains the ``404 (Not found)`` status code.
 
-``api/quizzes/{id}`` - Accepts DELETE requests. An endpoint is responsible for deleting a particular quiz. The user is not allowed to delete a quiz that he didn't create. Otherwise, the response will contain the ``403 (Forbbiden)`` status code. 
+``/api/quizzes/{id}`` - Accepts DELETE requests. An endpoint is responsible for deleting a particular quiz. The user is not allowed to delete a quiz that he didn't create. Otherwise, the response will contain the ``403 (Forbbiden)`` status code. 
 
 ``/api/quizzes/{id}/solve`` - Accepts POST requests and is used to solve particular quiz. In the request body, a user should put his answers according to the question in the format ``{ "answer": [] }``.
